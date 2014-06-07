@@ -6,10 +6,19 @@ window.onload = function() {
     var speed = 1;
     var difficulty = 5;
     var obstacles = [];
-    var bgSound = new Audio('sounds/background.mp3');
+    var legTransform = -2;
+    var legMovementDirection = 0.25;
+    var bodyPath = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
+    var legPath = "M0,0C0,0,-35,1,-35,1C-35,1,-61,-10,-61,-10C-61,-10,-82,17,-82,17C-82,17,-104,25,-104,25C-25,79,11,72,1,1C1,1,0,0,0,0"
+    bodyPath = Raphael.transformPath(bodyPath, 't 500,200 s 0.1 0.1 r10');
+    var leftLegPath = Raphael.transformPath(legPath, 't 555,380 s 0.1 0.1');
+    var rightLegPath = Raphael.transformPath(legPath, 't 570,380 s 0.1 0.1');
+
+
+    /*    var bgSound = new Audio('sounds/background.mp3');
     bgSound.loop = true;
     bgSound.volume = 0.50;
-    bgSound.play();
+    bgSound.play(); */
 
     var paper = Raphael(10, 10, 1000, 800);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
@@ -44,6 +53,14 @@ window.onload = function() {
     function run() {
         generateNewObstacles();
         moveObstacles();
+        penguin[0].transform('T 0 ' + legTransform);
+        penguin[1].transform('T 0 ' + (-legTransform));
+        penguin[2].transform('R ' + legTransform * 5);
+        legTransform += legMovementDirection;
+        console.log(legTransform);
+        if (legTransform > 2 || legTransform < -2) {
+            legMovementDirection = -legMovementDirection;
+        };
         window.requestAnimationFrame(run);
     }
 
@@ -72,7 +89,7 @@ window.onload = function() {
         }
     }
 
-    function makePenguin() {
+    /*    function makePenguin() {
         var penguin = paper.set();
         var path = 'm 130,294 -35,1 -26,-11 -21,27 -22,8 c 79,54 115,47 105,-24 z';
         var rightLeg = paper.path(path).attr({
@@ -86,16 +103,71 @@ window.onload = function() {
             'fill': '#ffcc00'
         })
 
-        path = 'M 0,0 c -19,15 -28,29 -38,45 -38,12 -67,59 -61,124 -90,56 -121,114 7,80 12,209 265,134 216,-29 142,-80 62,-90 -22,-81 -16,-71 -72,-104 -121,-98 0,-13 12,-26 19,-40 z';
+        path = 'm 0,0 c -19,15 -28,29 -38,45 -38,12 -67,59 -61,124 -90,56 -121,114 7,80 12,209 265,134 216,-29 142,-80 62,-90 -22,-81 -16,-71 -72,-104 -121,-98 0,-13 12,-26 19,-40 z';
         var body = paper.path(path).attr({
             'stroke': '#000000',
             'fill': '#000000'
         })
+        body.node.id = 'body';
         penguin.push(leftLeg);
         penguin.push(rightLeg);
         penguin.push(body);
         penguin.transform('T 100 300 s 0.1 0.1 500 100');
         penguin.toFront();
         return penguin;
+    } */
+
+    function makePenguin() {
+        var penguin = paper.set();
+        var rightLeg = paper.path(rightLegPath).attr({
+            'stroke': '#ffcc00',
+            'fill': '#ffcc00'
+        })
+        var leftLeg = paper.path(leftLegPath).attr({
+            'stroke': '#ffcc00',
+            'fill': '#ffcc00'
+        })
+        var body = paper.path(bodyPath).attr({
+            'stroke': '#000000',
+            'fill': '#000000'
+        })
+        penguin.push(leftLeg);
+        penguin.push(rightLeg);
+        penguin.push(body);
+        return penguin;
     }
 }
+
+//penguin[0].attrs.path[1]
+
+/*
+        var path = [
+            ["M", x, y],
+            ["C", ax, ay, bx, by, zx, zy]
+        ],
+            path2 = [
+                ["M", x, y],
+                ["L", ax, ay],
+                ["M", bx, by],
+                ["L", zx, zy]
+            ],
+
+            curve = r.path(path);
+            controls = r.set(
+                r.path(path2),
+                r.circle(x, y, 5),
+                r.circle(ax, ay, 5),
+                r.circle(bx, by, 5),
+                r.circle(zx, zy, 5)
+            );
+
+            curve.attr({
+            path: path
+            });
+            
+            controls[0].attr({
+                path: path2
+            });
+
+
+*/
