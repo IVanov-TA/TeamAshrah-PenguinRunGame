@@ -6,6 +6,10 @@ window.onload = function() {
     var speed = 1;
     var difficulty = 5;
     var obstacles = [];
+    var bgSound = new Audio('sounds/background.mp3');
+    bgSound.loop = true;
+    bgSound.volume = 0.50;
+    bgSound.play();
 
     var paper = Raphael(10, 10, 1000, 800);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
