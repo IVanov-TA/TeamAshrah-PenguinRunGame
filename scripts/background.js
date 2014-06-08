@@ -26,8 +26,8 @@ var sun = paper.circle(100, 75, 20)
     cx: 950,
     cy: 45,
     fill: '#FF6600 ',
-    stroke: 'red',
-    'stroke-width': 2,
+    stroke: '#FF6666',
+    'stroke-width': 1,
     r: 30
 }, 45000);
 
