@@ -4,6 +4,7 @@ window.onload = function() {
     var gameboardHeight = 400;
     var obstacleInitialWidth = 20;
     var speed = 1;
+    var xNewPosition = 0;
     var difficulty = 5;
     var obstacles = [];
     var legTransform = -2;
@@ -53,14 +54,15 @@ window.onload = function() {
     function run() {
         generateNewObstacles();
         moveObstacles();
-        penguin[0].transform('T 0 ' + legTransform);
-        penguin[1].transform('T 0 ' + (-legTransform));
+        penguin[0].transform('T'+' '+ xNewPosition*speed*3 + ' '  + legTransform);
+        penguin[1].transform('T'+' '+ xNewPosition*speed*3 + ' '  + (-legTransform));
         penguin[2].transform('R ' + legTransform * 5);
         legTransform += legMovementDirection;
-        console.log(legTransform);
+        //console.log(legTransform);
         if (legTransform > 2 || legTransform < -2) {
             legMovementDirection = -legMovementDirection;
         };
+        document.getElementsByTagName("body")[0].addEventListener("keydown", getKey, false);
         window.requestAnimationFrame(run);
     }
 
@@ -136,6 +138,13 @@ window.onload = function() {
         penguin.push(body);
         return penguin;
     }
+
+    function getKey(button){
+	    switch (button.keyCode) {
+	        case 37: xNewPosition += -1; break;
+	        case 39: xNewPosition += 1; break;
+	    }
+	}
 }
 
 //penguin[0].attrs.path[1]
@@ -168,6 +177,5 @@ window.onload = function() {
             controls[0].attr({
                 path: path2
             });
-
-
 */
+
