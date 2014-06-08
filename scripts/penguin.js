@@ -3,6 +3,7 @@ window.onload = function() {
     var gameboardCenter = 500;
     var gameboardHeight = 400;
     var speed = 1;
+    var score = 0;
     var xNewPosition = 0;
     var difficulty = 5;
     var obstacles = [];
@@ -18,6 +19,7 @@ window.onload = function() {
         'stroke': '#99FFFF',
         'fill': '#CCFFFF'
     });
+
     document.getElementsByTagName("body")[0].addEventListener("keydown", getKey, false);
     var penguin = makePenguin();
     run();
@@ -49,6 +51,7 @@ window.onload = function() {
         generateNewObstacles();
         moveObstacles();
         penguin.walk();
+        if (++score % 10 === 0) scoreDraw();
         window.requestAnimationFrame(run);
     }
 
@@ -89,7 +92,7 @@ window.onload = function() {
         var jumpLen = 0;
 
         function walk() {
-            console.log(jumpLen);
+            //console.log(jumpLen);
             penguin[0].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + legTransform);
             penguin[1].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + (-legTransform));
             if (jumpLen > -50) {
@@ -151,6 +154,19 @@ window.onload = function() {
                 button.preventDefault();
                 break;
         }
+    }
+
+    function scoreDraw(){
+	    paper.rect(0, 10, 100, 20)
+	    .attr({
+	        'fill': '#CCFFFF',
+	        'stroke': 'darkblue',
+	        'stroke-width': 4
+	    })
+	    paper.text(40,20,'SCORE: ' + score).attr({
+	       'fill': 'darkblue',
+	    });
+	    if (score % 1000 === 0) speed += 1;
     }
 }
 
