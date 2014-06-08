@@ -89,9 +89,10 @@ window.onload = function() {
         var jumpLen = 0;
 
         function walk() {
+            console.log(jumpLen);
             penguin[0].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + legTransform);
             penguin[1].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + (-legTransform));
-            if (jumpLen > 0) {
+            if (jumpLen > -50) {
                 if (jumpLen === 1) {
                     penguin[2].attr({
                         path: bodyPath
@@ -107,7 +108,9 @@ window.onload = function() {
         }
 
         function jump() {
-            console.log('jump');
+            if (jumpLen > -49) {
+                return;
+            }
             penguin[2].attr({
                 path: jumpingBodyPath
             });
