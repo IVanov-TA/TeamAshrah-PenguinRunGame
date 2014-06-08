@@ -12,7 +12,7 @@ window.onload = function() {
     bgSound.volume = 0.50;
     bgSound.play(); */
 
-    var paper = Raphael(10, 10, 980, 800);
+    var paper = Raphael(10, 10, 980, 500);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
         ' h-' + (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' + (-gameboardHeight) + ' Z').attr({
         'stroke': '#99FFFF',

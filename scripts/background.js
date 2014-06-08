@@ -1,5 +1,5 @@
 ﻿/// <reference path="E:\Telerik\Java Script 2 DOM and UL\Teamwork\BackGround\BackGround\raphael-min.js" />
-var paper = Raphael(0, 10, 1000, 800);
+var paper = Raphael(0, 10, 1015, 550);
 var sky = paper.rect(10, 10, 1000, 492)
     .attr({
         'fill': '#FFFFCC',
@@ -24,13 +24,13 @@ var sun = paper.circle(100, 75, 20)
     stroke: 'orange'
 })
 .animate({
-    cx: 950,
+    cx: 550,
     cy: 45,
     fill: '#FF6600 ',
     stroke: '#FF6666',
     'stroke-width': 1,
     r: 30
-}, 45000)
+})
     .attr({
         cx: 100,
         fill: 'yellow',
@@ -40,7 +40,7 @@ var sun = paper.circle(100, 75, 20)
         cx: 950,
         cy: 45,
         fill: '#FF6600 ',
-        stroke: 'red',
+        stroke: '#FF6666',
         'stroke-width': 2,
         r: 30
     }, 45000);
