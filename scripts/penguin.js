@@ -2,19 +2,10 @@ window.onload = function() {
     'use strict';
     var gameboardCenter = 500;
     var gameboardHeight = 400;
-    var obstacleInitialWidth = 20;
     var speed = 1;
     var xNewPosition = 0;
     var difficulty = 5;
     var obstacles = [];
-    var legTransform = -2;
-    var legMovementDirection = 0.25;
-    var bodyPath = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
-    var legPath = "M0,0C0,0,-35,1,-35,1C-35,1,-61,-10,-61,-10C-61,-10,-82,17,-82,17C-82,17,-104,25,-104,25C-25,79,11,72,1,1C1,1,0,0,0,0"
-    bodyPath = Raphael.transformPath(bodyPath, 't 500,200 s 0.1 0.1 r10');
-    var leftLegPath = Raphael.transformPath(legPath, 't 555,380 s 0.1 0.1');
-    var rightLegPath = Raphael.transformPath(legPath, 't 570,380 s 0.1 0.1');
-
 
     /*    var bgSound = new Audio('sounds/background.mp3');
     bgSound.loop = true;
@@ -24,11 +15,10 @@ window.onload = function() {
     var paper = Raphael(10, 10, 1000, 800);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
         ' h-' + (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' + (-gameboardHeight) + ' Z').attr({
-        //        'stroke': 'black'
         'stroke': '#99FFFF',
         'fill': '#CCFFFF'
-
     });
+    document.getElementsByTagName("body")[0].addEventListener("keydown", getKey, false);
     var penguin = makePenguin();
     run();
 
@@ -50,9 +40,6 @@ window.onload = function() {
             'stroke': '#99FFFF',
             'fill': 'blue',
             'stroke-width': 2
-
-            //            'stroke': 'blue',
-            //            'fill': 'blue'
         })
         rect.myY = 100;
         return rect;
@@ -61,23 +48,13 @@ window.onload = function() {
     function run() {
         generateNewObstacles();
         moveObstacles();
-        penguin[0].transform('T' + ' ' + xNewPosition * speed * 3 + ' ' + legTransform);
-        penguin[1].transform('T' + ' ' + xNewPosition * speed * 3 + ' ' + (-legTransform));
-        penguin[2].transform('R ' + legTransform * 5);
-        legTransform += legMovementDirection;
-        //console.log(legTransform);
-        if (legTransform > 2 || legTransform < -2) {
-            legMovementDirection = -legMovementDirection;
-        };
-        document.getElementsByTagName("body")[0].addEventListener("keydown", getKey, false);
+        penguin.walk();
         window.requestAnimationFrame(run);
     }
 
     function generateNewObstacles() {
         if (!parseInt(Math.random() * 500 / difficulty / speed)) {
             var xPos = Math.random() * 80 + 460;
-            //xPos = 455;
-            //xPos = 520;
             var obstacle = makeRect(xPos, 100);
             obstacles.push(obstacle);
         }
@@ -98,35 +75,43 @@ window.onload = function() {
         }
     }
 
-    /*    function makePenguin() {
-        var penguin = paper.set();
-        var path = 'm 130,294 -35,1 -26,-11 -21,27 -22,8 c 79,54 115,47 105,-24 z';
-        var rightLeg = paper.path(path).attr({
-            'stroke': '#ffcc00',
-            'fill': '#ffcc00'
-        })
-
-        path = 'm 20,343 -35,1 -26,-11 -21,27 -22,8 c 79,54 115,47 105,-24 z';
-        var leftLeg = paper.path(path).attr({
-            'stroke': '#ffcc00',
-            'fill': '#ffcc00'
-        })
-
-        path = 'm 0,0 c -19,15 -28,29 -38,45 -38,12 -67,59 -61,124 -90,56 -121,114 7,80 12,209 265,134 216,-29 142,-80 62,-90 -22,-81 -16,-71 -72,-104 -121,-98 0,-13 12,-26 19,-40 z';
-        var body = paper.path(path).attr({
-            'stroke': '#000000',
-            'fill': '#000000'
-        })
-        body.node.id = 'body';
-        penguin.push(leftLeg);
-        penguin.push(rightLeg);
-        penguin.push(body);
-        penguin.transform('T 100 300 s 0.1 0.1 500 100');
-        penguin.toFront();
-        return penguin;
-    } */
-
     function makePenguin() {
+        var bodyPath = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
+        var jumpingBodyPath = "M0,100C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
+        var legPath = "M0,0C0,0,-35,1,-35,1C-35,1,-61,-10,-61,-10C-61,-10,-82,17,-82,17C-82,17,-104,25,-104,25C-25,79,11,72,1,1C1,1,0,0,0,0"
+        bodyPath = Raphael.transformPath(bodyPath, 't 500,200 s 0.1 0.1 r10');
+        jumpingBodyPath = Raphael.transformPath(bodyPath, 't 500,200 s 0.1 0.1 r10');
+        var leftLegPath = Raphael.transformPath(legPath, 't 555,380 s 0.1 0.1');
+        var rightLegPath = Raphael.transformPath(legPath, 't 570,380 s 0.1 0.1');
+        var legTransform = -2;
+        var legMovementDirection = 0.5;
+        var jumpLen = 0;
+
+        function walk() {
+            penguin[0].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + legTransform);
+            penguin[1].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + (-legTransform));
+            if (jumpLen > 0) {
+                if (jumpLen === 1) {
+                    penguin[2].attr({
+                        path: bodyPath
+                    });
+                }
+                jumpLen--;
+            }
+            penguin[2].transform('T' + ' ' + xNewPosition * speed * 5 + ' 0 R ' + legTransform * 5);
+            legTransform += legMovementDirection;
+            if (legTransform > 2 || legTransform < -2) {
+                legMovementDirection = -legMovementDirection;
+            };
+        }
+
+        function jump() {
+            penguin[2].attr({
+                path: jumpingBodyPath
+            });
+            jumpLen = 30;
+        }
+
         var penguin = paper.set();
         var rightLeg = paper.path(rightLegPath).attr({
             'stroke': '#ffcc00',
@@ -143,16 +128,22 @@ window.onload = function() {
         penguin.push(leftLeg);
         penguin.push(rightLeg);
         penguin.push(body);
+        penguin.walk = walk;
+        penguin.jump = jump;
         return penguin;
     }
 
     function getKey(button) {
+        console.log(button.keyCode);
         switch (button.keyCode) {
             case 37:
                 xNewPosition += -1;
                 break;
             case 39:
                 xNewPosition += 1;
+                break;
+            case 32:
+                penguin.jump();
                 break;
         }
     }
@@ -188,4 +179,32 @@ window.onload = function() {
             controls[0].attr({
                 path: path2
             });
+            
+        function makePenguin() {
+        var penguin = paper.set();
+        var path = 'm 130,294 -35,1 -26,-11 -21,27 -22,8 c 79,54 115,47 105,-24 z';
+        var rightLeg = paper.path(path).attr({
+            'stroke': '#ffcc00',
+            'fill': '#ffcc00'
+        })
+
+        path = 'm 20,343 -35,1 -26,-11 -21,27 -22,8 c 79,54 115,47 105,-24 z';
+        var leftLeg = paper.path(path).attr({
+            'stroke': '#ffcc00',
+            'fill': '#ffcc00'
+        })
+
+        path = 'm 0,0 c -19,15 -28,29 -38,45 -38,12 -67,59 -61,124 -90,56 -121,114 7,80 12,209 265,134 216,-29 142,-80 62,-90 -22,-81 -16,-71 -72,-104 -121,-98 0,-13 12,-26 19,-40 z';
+        var body = paper.path(path).attr({
+            'stroke': '#000000',
+            'fill': '#000000'
+        })
+        body.node.id = 'body';
+        penguin.push(leftLeg);
+        penguin.push(rightLeg);
+        penguin.push(body);
+        penguin.transform('T 100 300 s 0.1 0.1 500 100');
+        penguin.toFront();
+        return penguin;
+    }
 */

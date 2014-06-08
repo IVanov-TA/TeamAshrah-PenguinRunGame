@@ -1,15 +1,15 @@
 ﻿/// <reference path="E:\Telerik\Java Script 2 DOM and UL\Teamwork\BackGround\BackGround\raphael-min.js" />
-var paper = Raphael(0, 10, 1020, 800);
+var paper = Raphael(0, 10, 1000, 800);
 var sky = paper.rect(10, 10, 1000, 492)
-.attr({
-    'fill': '#FFFFCC',
-    'stroke': 'darkblue',
-    'stroke-width': 4
-})
+    .attr({
+        'fill': '#FFFFCC',
+        'stroke': 'darkblue',
+        'stroke-width': 4
+    })
 
 .animate({
     'fill': '#FFFF00',
-    callback: function () {
+    callback: function() {
         sky.animate({
             fill: '#6633CC'
         }, 15000)
@@ -17,27 +17,27 @@ var sky = paper.rect(10, 10, 1000, 492)
 }, 20000);
 
 var sun = paper.circle(100, 75, 20)
-.attr({
-    cx: 100,
-    fill: 'yellow',
-    stroke: 'orange'
-})
-.animate({
-    cx: 950,
-    cy: 45,
-    fill: '#FF6600 ',
-    stroke: 'red',
-    'stroke-width': 2,
-    r: 30
-}, 45000);
+    .attr({
+        cx: 100,
+        fill: 'yellow',
+        stroke: 'orange'
+    })
+    .animate({
+        cx: 950,
+        cy: 45,
+        fill: '#FF6600 ',
+        stroke: 'red',
+        'stroke-width': 2,
+        r: 30
+    }, 45000);
 
 
 var mountains = paper.path('M 14 100 L 100 50 L 300 150 L 250 125 L 450 30 l 80 40 l 200 30 l-100 -14 l 150 -30 l 227 40 L 1007 499 L 14 499 z')
-.attr({
-    stroke: '#99FFCC',
-    'stroke-width': 2,
-    'fill': '#9966FF',
-});
+    .attr({
+        stroke: '#99FFCC',
+        'stroke-width': 2,
+        'fill': '#9966FF',
+    });
 
 //paper.setStart();
 //var ice = paper.rect(60, 280, 30, 15);
