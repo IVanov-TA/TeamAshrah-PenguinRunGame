@@ -9,7 +9,7 @@ var sky = paper.rect(10, 10, 1000, 492)
 
 .animate({
     'fill': '#FFFF00',
-    callback: function() {
+    callback: function () {
         sky.animate({
             fill: '#6633CC'
         }, 15000)
@@ -17,7 +17,7 @@ var sky = paper.rect(10, 10, 1000, 492)
 }, 20000);
 
 var sun = paper.circle(100, 75, 20)
-<<<<<<< HEAD
+
 .attr({
     cx: 100,
     fill: 'yellow',
@@ -30,8 +30,7 @@ var sun = paper.circle(100, 75, 20)
     stroke: '#FF6666',
     'stroke-width': 1,
     r: 30
-}, 45000);
-=======
+}, 45000)
     .attr({
         cx: 100,
         fill: 'yellow',
@@ -45,7 +44,6 @@ var sun = paper.circle(100, 75, 20)
         'stroke-width': 2,
         r: 30
     }, 45000);
->>>>>>> bf52811b80a685821e180163c9c304adaaba8997
 
 
 var mountains = paper.path('M 14 100 L 100 50 L 300 150 L 250 125 L 450 30 l 80 40 l 200 30 l-100 -14 l 150 -30 l 227 40 L 1007 499 L 14 499 z')
