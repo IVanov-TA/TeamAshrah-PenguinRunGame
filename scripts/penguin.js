@@ -12,7 +12,7 @@ window.onload = function() {
     bgSound.volume = 0.50;
     bgSound.play(); */
 
-    var paper = Raphael(10, 10, 1000, 800);
+    var paper = Raphael(10, 10, 980, 800);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
         ' h-' + (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' + (-gameboardHeight) + ' Z').attr({
         'stroke': '#99FFFF',
@@ -76,13 +76,14 @@ window.onload = function() {
     }
 
     function makePenguin() {
-        var bodyPath = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
-        var jumpingBodyPath = "M0,100C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
-        var legPath = "M0,0C0,0,-35,1,-35,1C-35,1,-61,-10,-61,-10C-61,-10,-82,17,-82,17C-82,17,-104,25,-104,25C-25,79,11,72,1,1C1,1,0,0,0,0"
-        bodyPath = Raphael.transformPath(bodyPath, 't 500,200 s 0.1 0.1 r10');
-        jumpingBodyPath = Raphael.transformPath(bodyPath, 't 500,200 s 0.1 0.1 r10');
-        var leftLegPath = Raphael.transformPath(legPath, 't 555,380 s 0.1 0.1');
-        var rightLegPath = Raphael.transformPath(legPath, 't 570,380 s 0.1 0.1');
+        var bodyPathStr = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
+        var jumpingBodyPathStr = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-489,125,-220,283,-92,249C-80,458,173,383,124,220C566,40,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
+        var bodyPath = Raphael.transformPath(bodyPathStr, 't 500,200 s 0.1 0.1 r10');
+        var jumpingBodyPath = Raphael.transformPath(jumpingBodyPathStr, 't 500,190 s 0.1 0.1 r10');
+
+        var legPathStr = "M0,0C0,0,-35,1,-35,1C-35,1,-61,-10,-61,-10C-61,-10,-82,17,-82,17C-82,17,-104,25,-104,25C-25,79,11,72,1,1C1,1,0,0,0,0"
+        var leftLegPath = Raphael.transformPath(legPathStr, 't 555,380 s 0.1 0.1');
+        var rightLegPath = Raphael.transformPath(legPathStr, 't 570,380 s 0.1 0.1');
         var legTransform = -2;
         var legMovementDirection = 0.5;
         var jumpLen = 0;
@@ -106,6 +107,7 @@ window.onload = function() {
         }
 
         function jump() {
+            console.log('jump');
             penguin[2].attr({
                 path: jumpingBodyPath
             });
@@ -134,7 +136,6 @@ window.onload = function() {
     }
 
     function getKey(button) {
-        console.log(button.keyCode);
         switch (button.keyCode) {
             case 37:
                 xNewPosition += -1;
@@ -144,6 +145,7 @@ window.onload = function() {
                 break;
             case 32:
                 penguin.jump();
+                button.preventDefault();
                 break;
         }
     }
