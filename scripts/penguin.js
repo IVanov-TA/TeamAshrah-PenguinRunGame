@@ -93,8 +93,8 @@ window.onload = function() {
 
         function walk() {
             //console.log(jumpLen);
-            penguin[0].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + legTransform);
-            penguin[1].transform('T' + ' ' + xNewPosition * speed * 5 + ' ' + (-legTransform));
+            penguin[0].transform('T' + ' ' + xNewPosition * 10 + ' ' + legTransform);
+            penguin[1].transform('T' + ' ' + xNewPosition * 10 + ' ' + (-legTransform));
             if (jumpLen > -50) {
                 if (jumpLen === 1) {
                     penguin[2].attr({
@@ -103,7 +103,7 @@ window.onload = function() {
                 }
                 jumpLen--;
             }
-            penguin[2].transform('T' + ' ' + xNewPosition * speed * 5 + ' 0 R ' + legTransform * 5);
+            penguin[2].transform('T' + ' ' + xNewPosition * 10 + ' 0 R ' + legTransform * 5);
             legTransform += legMovementDirection;
             if (legTransform > 2 || legTransform < -2) {
                 legMovementDirection = -legMovementDirection;
@@ -156,76 +156,16 @@ window.onload = function() {
         }
     }
 
-    function scoreDraw(){
-	    paper.rect(0, 10, 100, 20)
-	    .attr({
-	        'fill': '#CCFFFF',
-	        'stroke': 'darkblue',
-	        'stroke-width': 4
-	    })
-	    paper.text(40,20,'SCORE: ' + score).attr({
-	       'fill': 'darkblue',
-	    });
-	    if (score % 1000 === 0) speed += 1;
+    function scoreDraw() {
+        paper.rect(0, 10, 100, 20)
+            .attr({
+                'fill': '#CCFFFF',
+                'stroke': 'darkblue',
+                'stroke-width': 4
+            })
+        paper.text(40, 20, 'SCORE: ' + score).attr({
+            'fill': 'darkblue',
+        });
+        if (score % 1000 === 0) speed += 0.2;
     }
 }
-
-//penguin[0].attrs.path[1]
-
-/*
-        var path = [
-            ["M", x, y],
-            ["C", ax, ay, bx, by, zx, zy]
-        ],
-            path2 = [
-                ["M", x, y],
-                ["L", ax, ay],
-                ["M", bx, by],
-                ["L", zx, zy]
-            ],
-
-            curve = r.path(path);
-            controls = r.set(
-                r.path(path2),
-                r.circle(x, y, 5),
-                r.circle(ax, ay, 5),
-                r.circle(bx, by, 5),
-                r.circle(zx, zy, 5)
-            );
-
-            curve.attr({
-            path: path
-            });
-            
-            controls[0].attr({
-                path: path2
-            });
-            
-        function makePenguin() {
-        var penguin = paper.set();
-        var path = 'm 130,294 -35,1 -26,-11 -21,27 -22,8 c 79,54 115,47 105,-24 z';
-        var rightLeg = paper.path(path).attr({
-            'stroke': '#ffcc00',
-            'fill': '#ffcc00'
-        })
-
-        path = 'm 20,343 -35,1 -26,-11 -21,27 -22,8 c 79,54 115,47 105,-24 z';
-        var leftLeg = paper.path(path).attr({
-            'stroke': '#ffcc00',
-            'fill': '#ffcc00'
-        })
-
-        path = 'm 0,0 c -19,15 -28,29 -38,45 -38,12 -67,59 -61,124 -90,56 -121,114 7,80 12,209 265,134 216,-29 142,-80 62,-90 -22,-81 -16,-71 -72,-104 -121,-98 0,-13 12,-26 19,-40 z';
-        var body = paper.path(path).attr({
-            'stroke': '#000000',
-            'fill': '#000000'
-        })
-        body.node.id = 'body';
-        penguin.push(leftLeg);
-        penguin.push(rightLeg);
-        penguin.push(body);
-        penguin.transform('T 100 300 s 0.1 0.1 500 100');
-        penguin.toFront();
-        return penguin;
-    }
-*/
