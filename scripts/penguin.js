@@ -7,10 +7,10 @@ window.onload = function() {
     var xNewPosition = 0;
     var difficulty = 5;
     var obstacles = [];
-	
-	// starts the background loop music
-	activeBackgroundSound();
-	
+
+    // starts the background loop music
+    activeBackgroundSound();
+
     var paper = Raphael(10, 10, 980, 500);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
         ' h-' + (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' + (-gameboardHeight) + ' Z').attr({
@@ -112,8 +112,8 @@ window.onload = function() {
             if (jumpLen > -49) {
                 return;
             }
-			// enable jump sound of the penguin
-			jumpSound();
+            // enable jump sound of the penguin
+            jumpSound();
             penguin[2].attr({
                 path: jumpingBodyPath
             });
@@ -144,16 +144,21 @@ window.onload = function() {
     function getKey(button) {
         switch (button.keyCode) {
             case 37:
-                xNewPosition += -1;
+                if (xNewPosition > -36) {
+                    xNewPosition -= 1;
+                };
                 break;
             case 39:
-                xNewPosition += 1;
+                if (xNewPosition < 33) {
+                    xNewPosition += 1;
+                };
                 break;
             case 32:
                 penguin.jump();
                 button.preventDefault();
                 break;
         }
+        console.log(xNewPosition);
     }
 
     function scoreDraw() {
