@@ -3,30 +3,28 @@
 <head>
     <title>Antarctic Rush</title>
     <link href="styles/Start%20Page.css" rel="stylesheet" />
+    <script type="text/javascript" src="scripts/gameSounds.js"></script>
 </head>
-<body>
+<body onload="menuBackground()">
     <div id="wrapper">
 
         <div>
             <ul id="buttons">
                 <li>
-                    <button id="play" type="button" onclick="javascript:location.href='Penguin.html'">Play</button>
+                    <button id="play" type="button" onclick="javascript:location.href='Penguin.html'" onmouseover="btnHovered() ">Play</button>
                 </li>
                 <li>
-                    <button id="how" type="button">How to play?</button>
+                    <button id="how" type="button" onmouseover="btnHovered() ">How to play?</button>
                 </li>
                 <li>
-                    <button id="high" type="button">High Scores</button>
+                    <button id="high" type="button" onmouseover="btnHovered() ">High Scores</button>
                 </li>
                 <li>
-                    <button id="exit" type="button">Exit</button>
+                    <button id="exit" type="button" onmouseover="btnHovered() ">Exit</button>
                 </li>
             </ul>
         </div>
         <h1>Antarctic Rush</h1>
-
     </div>
-
-    <script src="Penguin.js"></script>
 </body>
 </html>

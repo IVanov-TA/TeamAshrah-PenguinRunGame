@@ -7,12 +7,10 @@ window.onload = function() {
     var xNewPosition = 0;
     var difficulty = 5;
     var obstacles = [];
-
-    /*    var bgSound = new Audio('sounds/background.mp3');
-    bgSound.loop = true;
-    bgSound.volume = 0.50;
-    bgSound.play(); */
-
+	
+	// starts the background loop music
+	activeBackgroundSound();
+	
     var paper = Raphael(10, 10, 980, 500);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
         ' h-' + (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' + (-gameboardHeight) + ' Z').attr({
@@ -114,6 +112,8 @@ window.onload = function() {
             if (jumpLen > -49) {
                 return;
             }
+			// enable jump sound of the penguin
+			jumpSound();
             penguin[2].attr({
                 path: jumpingBodyPath
             });
