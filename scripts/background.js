@@ -6,18 +6,16 @@ var sky = paper.rect(10, 10, 1000, 492)
         'stroke': 'darkblue',
         'stroke-width': 4
     })
-
 .animate({
     'fill': '#FFFF00',
     callback: function () {
         sky.animate({
             fill: '#6633CC'
-        }, 15000)
+        }, 20000)
     }
 }, 20000);
 
 var sun = paper.circle(100, 75, 20)
-
 .attr({
     cx: 100,
     fill: 'yellow',
@@ -27,23 +25,27 @@ var sun = paper.circle(100, 75, 20)
     cx: 550,
     cy: 45,
     fill: '#FF6600 ',
-    stroke: '#FF6666',
+    stroke: '#FBBBB9',
     'stroke-width': 1,
     r: 30
 })
-    .attr({
-        cx: 100,
-        fill: 'yellow',
-        stroke: 'orange'
-    })
     .animate({
-        cx: 950,
+        cx: 670,
         cy: 45,
-        fill: '#FF6600 ',
+        fill: '#FAAFBE ',
         stroke: '#FF6666',
         'stroke-width': 2,
-        r: 30
-    }, 45000);
+        r: 32,
+        callback: function () {
+            sun.animate({
+                cx: 950,
+                cy: 140,
+                fill: '#FF6600 ',
+                stroke: '#FF6666',
+            }, 23000)
+        }
+    }, 35000);
+
 
 
 var mountains = paper.path('M 14 100 L 100 50 L 300 150 L 250 125 L 450 30 l 80 40 l 200 30 l-100 -14 l 150 -30 l 227 40 L 1007 499 L 14 499 z')
