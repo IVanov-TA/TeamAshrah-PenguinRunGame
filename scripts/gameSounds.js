@@ -23,3 +23,15 @@ function jumpSound() {
 	jump.volume = 1;
 	jump.play();	
 }
+
+function hittedSound() {
+	var jump = new Audio('sounds/ouch.mp3');
+	jump.volume = 0.2;
+	jump.play();	
+}
+
+function gameOverSound() {
+	var jump = new Audio('sounds/gameOver.mp3');
+	jump.volume = 1;
+	jump.play();	
+}

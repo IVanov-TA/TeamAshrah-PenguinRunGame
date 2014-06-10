@@ -1,5 +1,12 @@
 window.onload = function() {
     'use strict';
+    var OUTER_HEALTH_BAR_WIDTH = 32,
+        OUTER_HEALTH_BAR_HEIGHT = 6,
+        INNER_HEALTH_BAR_HEIGHT = 4,
+        HEALTH_BAR_RADIUS = 1,
+        damage = 0.3,
+        initialHealth = 30;
+
     var gameboardCenter = 500,
         gameboardHeight = 400,
         speed = 1,
@@ -10,10 +17,12 @@ window.onload = function() {
 
     // starts the background loop music
     activeBackgroundSound();
-
+    
     var paper = Raphael(10, 10, 980, 500);
-    var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' + gameboardHeight + ' ' + gameboardHeight +
-        ' h-' + (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' + (-gameboardHeight) + ' Z').attr({
+    var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' +
+        gameboardHeight + ' ' + gameboardHeight + ' h-' +
+        (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' +
+        (-gameboardHeight) + ' Z').attr({
         'stroke': '#99FFFF',
         'fill': '#CCFFFF'
     });
@@ -32,10 +41,13 @@ window.onload = function() {
         y1 = y;
         x2 = x1 + rectW;
         y2 = y;
-        x3 = (x - gameboardCenter + rectW / 2) / (y - 50) * (y - 50 + rectH) + gameboardCenter;
+        x3 = (x - gameboardCenter + rectW / 2) /
+            (y - 50) * (y - 50 + rectH) + gameboardCenter;
         y3 = y2 + rectH;
-        x4 = (x - gameboardCenter - rectW / 2) / (y - 50) * (y - 50 + rectH) + gameboardCenter;
-        var path = 'M' + x1 + ' ' + y1 + ' H ' + x2 + ' L ' + x3 + ' ' + y3 + ' H ' + x4 + ' z';
+        x4 = (x - gameboardCenter - rectW / 2) / (y - 50) *
+            (y - 50 + rectH) + gameboardCenter;
+        var path = 'M' + x1 + ' ' + y1 + ' H ' +
+            x2 + ' L ' + x3 + ' ' + y3 + ' H ' + x4 + ' z';
         var rect = paper.path(path).attr({
             'stroke': '#99FFFF',
             'fill': 'blue',
@@ -47,13 +59,16 @@ window.onload = function() {
 
     function run() {
         generateNewObstacles();
-        var fall = moveObstacles();
-        if (fall) {
-            console.log('FALL');
-        };
+        moveObstacles();
         penguin.walk();
+        updateHealth();
         if (++score % 10 === 0) scoreDraw();
-        window.requestAnimationFrame(run);
+        if (initialHealth > 0) {
+            window.requestAnimationFrame(run);
+        } else {
+			// TODO GAME OVER SCREEN :(
+            gameOverSound();
+        }
     }
 
     function generateNewObstacles() {
@@ -68,10 +83,14 @@ window.onload = function() {
     function moveObstacles() {
         var penguinInObstacle = false;
         for (var i = 0; i < obstacles.length; i++) {
-            var transformString = 's ' + obstacles[i].myY / 100 + ' ' + obstacles[i].myY / 100 + ' ' + gameboardCenter + ' 50';
+            var transformString = 's ' + obstacles[i].myY / 100 +
+                ' ' + obstacles[i].myY / 100 + ' ' + gameboardCenter + ' 50';
             obstacles[i].transform(transformString);
-            if (!penguinInObstacle) {
-                penguinInObstacle = checkCollision(obstacles[i]);
+
+            penguinInObstacle = checkCollision(obstacles[i]);
+            if (penguinInObstacle) {
+                initialHealth -= damage;
+                !penguinInObstacle;
             }
 
             obstacles[i].myY = obstacles[i].myY + obstacles[i].myY / 100 * speed;
@@ -87,7 +106,16 @@ window.onload = function() {
 
     function checkCollision(currentObstacle) {
         var bbox = currentObstacle.getBBox(false);
-        return (!penguin.inFly && penguin.position.x > bbox.x && penguin.position.x < bbox.x2 && penguin.position.y > bbox.y && penguin.position.y < bbox.y2);
+        var hitted = (!penguin.inFly &&
+            penguin.position.x > bbox.x &&
+            penguin.position.x < bbox.x2 &&
+            penguin.position.y > bbox.y &&
+            penguin.position.y < bbox.y2);
+        if (hitted) {
+            hittedSound();
+        }
+
+        return hitted;
     }
 
     function makePenguin() {
@@ -124,10 +152,15 @@ window.onload = function() {
                 }
                 jumpLen--;
             }
-            penguin[2].transform('T' + ' ' + penguin.position.x + ' ' + penguin.position.y + ' R ' + legTransform * 5);
+            penguin[2].transform('T' + ' ' + penguin.position.x +
+                ' ' + penguin.position.y + ' R ' + legTransform * 5);
 
-            // for testing only
-            penguin[3].transform('T' + ' ' + penguin.position.x + ' ' + penguin.position.y);
+            // healthBar moving
+            var healthBarX = penguin.position.x - 15,
+                healthbarY = penguin.position.y - 50;
+
+            penguin[3].transform('T' + ' ' + healthBarX + ' ' + healthbarY);
+            penguin[4].transform('T' + ' ' + healthBarX + ' ' + healthbarY);
 
             legTransform += legMovementDirection;
             if (legTransform > 2 || legTransform < -2) {
@@ -169,11 +202,29 @@ window.onload = function() {
         penguin.jump = jump;
 
         // for testing only
-        var testrect = paper.rect(0, 0, 2, 2).attr({
-            'stroke': '#ff0000',
-            'fill': '#ff0000'
+        // var testrect = paper.rect(0, 0, 2, 2).attr({
+        //     'stroke': '#ff0000',
+        //     'fill': '#ff0000'
+        // });
+
+        // [pinguin healthbar]
+        var outerRect = paper.rect(0, 0,
+            OUTER_HEALTH_BAR_WIDTH, OUTER_HEALTH_BAR_HEIGHT, HEALTH_BAR_RADIUS);
+        outerRect.attr({
+            fill: '#FF1515'
         });
-        penguin.push(testrect);
+
+        // inner rect
+        var innerRect = paper.rect(1, 1,
+            initialHealth, INNER_HEALTH_BAR_HEIGHT, HEALTH_BAR_RADIUS);
+        innerRect.attr({
+            fill: '#00FF00',
+            stroke: 'none'
+        });
+
+        penguin.push(outerRect);
+        penguin.push(innerRect);
+
         penguin.inFly = false;
 
         penguin.walk();
@@ -211,4 +262,11 @@ window.onload = function() {
         });
         if (score % 1000 === 0) speed += 0.2;
     }
+
+    function updateHealth() {
+        penguin[4].attr({
+            width: initialHealth
+        })
+    }
+
 }
