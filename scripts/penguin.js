@@ -1,12 +1,12 @@
 window.onload = function() {
     'use strict';
-    var gameboardCenter = 500;
-    var gameboardHeight = 400;
-    var speed = 1;
-    var score = 0;
-    var xNewPosition = 0;
-    var difficulty = 5;
-    var obstacles = [];
+    var gameboardCenter = 500,
+        gameboardHeight = 400,
+        speed = 1,
+        score = 0,
+        xNewPosition = 0,
+        difficulty = 5,
+        obstacles = [];
 
     // starts the background loop music
     activeBackgroundSound();
@@ -47,7 +47,7 @@ window.onload = function() {
 
     function run() {
         generateNewObstacles();
-        moveObstacles();
+        var fall = moveObstacles();
         penguin.walk();
         if (++score % 10 === 0) scoreDraw();
         window.requestAnimationFrame(run);
@@ -63,46 +63,55 @@ window.onload = function() {
     }
 
     function moveObstacles() {
+        var penguinInObstacle = false;
         for (var i = 0; i < obstacles.length; i++) {
-            var transformString = 't ' + (obstacles[i].myY + 50) + ' ' + obstacles[i].myY - 50 +
-                ' s ' + obstacles[i].myY / 100 + ' ' + obstacles[i].myY / 100 + ' 500 50 ';
+            var transformString = 's ' + obstacles[i].myY / 100 + ' ' + obstacles[i].myY / 100 + ' 500 50 ';
             obstacles[i].transform(transformString);
+
+            //            console.log(obstacles[i].myY + 50);
             obstacles[i].myY = obstacles[i].myY + obstacles[i].myY / 100 * speed;
             if (obstacles[i].myY > gameboardCenter + gameboardHeight) {
                 obstacles[i].remove();
                 obstacles.splice(i, 1);
             }
-            
-            var penguinXPosition = [xNewPosition*10+555,xNewPosition*10+570];
-            var isPenguinDown = checkIfPenguinFell(obstacles[i],penguinXPosition);
 
+            //            var isPenguinDown = checkIfPenguinFell(obstacles[i], penguinXPosition);
             penguin.toFront();
         }
+        return penguinInObstacle;
     }
 
-    function checkIfPenguinFell(currentObstacle,penguinPosition){
+    function checkCollision(currentObstacle, penguinPosition) {
         //here if the currentObstacle is at the height of the penguin lowest leg point, we should check if the the horisontal 
         //position of the penguin (the diapason between penguinPosition[0] and penguinPosition[1]) coinside with the diapason of the currentObstacle
         return;
     }
 
     function makePenguin() {
+        var position = {
+            x: gameboardCenter,
+            y: gameboardHeight - 50
+        };
         var bodyPathStr = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-189,225,-220,283,-92,249C-80,458,173,383,124,220C266,140,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
         var jumpingBodyPathStr = "M0,0C-19,15,-28,29,-38,45C-76,57,-105,104,-99,169C-489,125,-220,283,-92,249C-80,458,173,383,124,220C566,40,186,130,102,139C86,68,30,35,-19,41C-19,28,-7,15,0,1C0,1,0,0,0,0";
-        var bodyPath = Raphael.transformPath(bodyPathStr, 't 500,200 s 0.1 0.1 r10');
-        var jumpingBodyPath = Raphael.transformPath(jumpingBodyPathStr, 't 500,190 s 0.1 0.1 r10');
+
+        var bodyPath = Raphael.transformPath(bodyPathStr, 't -13 -205 s 0.1 0.1 r10');
+        var jumpingBodyPath = Raphael.transformPath(jumpingBodyPathStr, 't -13 -210 s 0.1 0.1 r10');
 
         var legPathStr = "M0,0C0,0,-35,1,-35,1C-35,1,-61,-10,-61,-10C-61,-10,-82,17,-82,17C-82,17,-104,25,-104,25C-25,79,11,72,1,1C1,1,0,0,0,0"
-        var leftLegPath = Raphael.transformPath(legPathStr, 't 555,380 s 0.1 0.1');
-        var rightLegPath = Raphael.transformPath(legPathStr, 't 570,380 s 0.1 0.1');
+
+        var leftLegPath = Raphael.transformPath(legPathStr, 't 42 -25 s 0.1 0.1');
+        var rightLegPath = Raphael.transformPath(legPathStr, 't 57 -25 s 0.1 0.1');
+
+
         var legTransform = -2;
         var legMovementDirection = 0.5;
         var jumpLen = 0;
 
+
         function walk() {
-            //console.log(jumpLen);
-            penguin[0].transform('T' + ' ' + xNewPosition * 10 + ' ' + legTransform);
-            penguin[1].transform('T' + ' ' + xNewPosition * 10 + ' ' + (-legTransform));
+            penguin[0].transform('T' + ' ' + penguin.position.x + ' ' + (penguin.position.y + legTransform));
+            penguin[1].transform('T' + ' ' + penguin.position.x + ' ' + (penguin.position.y - legTransform));
             if (jumpLen > -50) {
                 if (jumpLen === 1) {
                     penguin[2].attr({
@@ -111,7 +120,11 @@ window.onload = function() {
                 }
                 jumpLen--;
             }
-            penguin[2].transform('T' + ' ' + xNewPosition * 10 + ' 0 R ' + legTransform * 5);
+            penguin[2].transform('T' + ' ' + penguin.position.x + ' ' + penguin.position.y + ' R ' + legTransform * 5);
+
+            // for testing only
+            penguin[3].transform('T' + ' ' + penguin.position.x + ' ' + penguin.position.y);
+
             legTransform += legMovementDirection;
             if (legTransform > 2 || legTransform < -2) {
                 legMovementDirection = -legMovementDirection;
@@ -146,21 +159,31 @@ window.onload = function() {
         penguin.push(leftLeg);
         penguin.push(rightLeg);
         penguin.push(body);
+        penguin.position = position;
         penguin.walk = walk;
         penguin.jump = jump;
+
+        // for testing only
+        var testrect = paper.rect(0, 0, 2, 2).attr({
+            'stroke': '#ff0000',
+            'fill': '#ff0000'
+        });
+        penguin.push(testrect);
+
+        penguin.walk();
         return penguin;
     }
 
     function getKey(button) {
         switch (button.keyCode) {
             case 37:
-                if (xNewPosition > -36) {
-                    xNewPosition -= 1;
+                if (penguin.position.x > 200) {
+                    penguin.position.x -= 10;
                 };
                 break;
             case 39:
-                if (xNewPosition < 33) {
-                    xNewPosition += 1;
+                if (penguin.position.x < 800) {
+                    penguin.position.x += 10;
                 };
                 break;
             case 32:
@@ -168,7 +191,6 @@ window.onload = function() {
                 button.preventDefault();
                 break;
         }
-        console.log(xNewPosition);
     }
 
     function scoreDraw() {
