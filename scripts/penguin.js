@@ -72,8 +72,18 @@ window.onload = function() {
                 obstacles[i].remove();
                 obstacles.splice(i, 1);
             }
+            
+            var penguinXPosition = [xNewPosition*10+555,xNewPosition*10+570];
+            var isPenguinDown = checkIfPenguinFell(obstacles[i],penguinXPosition);
+
             penguin.toFront();
         }
+    }
+
+    function checkIfPenguinFell(currentObstacle,penguinPosition){
+        //here if the currentObstacle is at the height of the penguin lowest leg point, we should check if the the horisontal 
+        //position of the penguin (the diapason between penguinPosition[0] and penguinPosition[1]) coinside with the diapason of the currentObstacle
+        return;
     }
 
     function makePenguin() {
