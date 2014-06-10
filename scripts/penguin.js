@@ -48,6 +48,9 @@ window.onload = function() {
     function run() {
         generateNewObstacles();
         var fall = moveObstacles();
+        if (fall) {
+            console.log('FALL');
+        };
         penguin.walk();
         if (++score % 10 === 0) scoreDraw();
         window.requestAnimationFrame(run);
@@ -65,26 +68,26 @@ window.onload = function() {
     function moveObstacles() {
         var penguinInObstacle = false;
         for (var i = 0; i < obstacles.length; i++) {
-            var transformString = 's ' + obstacles[i].myY / 100 + ' ' + obstacles[i].myY / 100 + ' 500 50 ';
+            var transformString = 's ' + obstacles[i].myY / 100 + ' ' + obstacles[i].myY / 100 + ' ' + gameboardCenter + ' 50';
             obstacles[i].transform(transformString);
+            if (!penguinInObstacle) {
+                penguinInObstacle = checkCollision(obstacles[i]);
+            }
 
-            //            console.log(obstacles[i].myY + 50);
             obstacles[i].myY = obstacles[i].myY + obstacles[i].myY / 100 * speed;
             if (obstacles[i].myY > gameboardCenter + gameboardHeight) {
                 obstacles[i].remove();
                 obstacles.splice(i, 1);
             }
 
-            //            var isPenguinDown = checkIfPenguinFell(obstacles[i], penguinXPosition);
             penguin.toFront();
         }
         return penguinInObstacle;
     }
 
-    function checkCollision(currentObstacle, penguinPosition) {
-        //here if the currentObstacle is at the height of the penguin lowest leg point, we should check if the the horisontal 
-        //position of the penguin (the diapason between penguinPosition[0] and penguinPosition[1]) coinside with the diapason of the currentObstacle
-        return;
+    function checkCollision(currentObstacle) {
+        var bbox = currentObstacle.getBBox(false);
+        return (!penguin.inFly && penguin.position.x > bbox.x && penguin.position.x < bbox.x2 && penguin.position.y > bbox.y && penguin.position.y < bbox.y2);
     }
 
     function makePenguin() {
@@ -117,6 +120,7 @@ window.onload = function() {
                     penguin[2].attr({
                         path: bodyPath
                     });
+                    penguin.inFly = false;
                 }
                 jumpLen--;
             }
@@ -141,6 +145,7 @@ window.onload = function() {
                 path: jumpingBodyPath
             });
             jumpLen = 30;
+            penguin.inFly = true;
         }
 
         var penguin = paper.set();
@@ -169,6 +174,7 @@ window.onload = function() {
             'fill': '#ff0000'
         });
         penguin.push(testrect);
+        penguin.inFly = false;
 
         penguin.walk();
         return penguin;
