@@ -43,7 +43,9 @@ window.onload = function() {
         GAME_OVER_HEIGHT);
     img.hide();
 
-    document.getElementsByTagName("body")[0].addEventListener("keydown", getKey, false);
+    document.getElementsByTagName("body")[0].addEventListener("keydown", pressKey, false);
+    document.getElementsByTagName("body")[0].addEventListener("keyup", releaseKey, false);
+
     var penguin = makePenguin();
     run();
 
@@ -82,21 +84,23 @@ window.onload = function() {
         if (initialHealth > 0) {
             window.requestAnimationFrame(run);
         } else {
-            hideObsticales();
+            //            hideObsticales();
             penguin.hide();
             img.show();
+            img.toFront()
             gameOverSound();
         }
     }
 
     function hideObsticales() {
-        for (var i = 0; i < obstacles.length; i++) {
-            obstacles.splice(i, 1);
-        };
+        while (obstacles.length) {
+            obstacles[0].remove;
+            obstacles.unshift;
+        }
     }
 
     function generateNewObstacles() {
-        if (!parseInt(Math.random() * 500 / difficulty / speed)) {
+        if (!parseInt(Math.random() * 200 / difficulty / speed)) {
             var xPos = Math.random() * 80 + 460;
             var obstacle = makeRect(xPos, 100);
             obstacle.hasPenguinInside = false;
@@ -167,6 +171,11 @@ window.onload = function() {
 
 
         function walk() {
+            if ((penguin.position.x < 200) || (penguin.position.x > 800)) {
+                penguin.step = 0;
+            }
+
+            penguin.position.x += penguin.step;
             penguin[0].transform('T' + ' ' + penguin.position.x + ' ' + (penguin.position.y + legTransform));
             penguin[1].transform('T' + ' ' + penguin.position.x + ' ' + (penguin.position.y - legTransform));
             if (jumpLen > -50) {
@@ -226,6 +235,7 @@ window.onload = function() {
         penguin.position = position;
         penguin.walk = walk;
         penguin.jump = jump;
+        penguin.step = 0;
 
         // [pinguin healthbar]
         var outerRect = paper.rect(0, 0,
@@ -251,21 +261,29 @@ window.onload = function() {
         return penguin;
     }
 
-    function getKey(button) {
+
+    function pressKey(button) {
         switch (button.keyCode) {
             case 37:
-                if (penguin.position.x > 200) {
-                    penguin.position.x -= 10;
-                };
+                penguin.step = -speed * 5;
                 break;
             case 39:
-                if (penguin.position.x < 800) {
-                    penguin.position.x += 10;
-                };
+                penguin.step = speed * 5;
                 break;
             case 32:
                 penguin.jump();
                 button.preventDefault();
+                break;
+        }
+    }
+
+    function releaseKey(button) {
+        switch (button.keyCode) {
+            case 37:
+                penguin.step = 0;
+                break;
+            case 39:
+                penguin.step = 0;
                 break;
         }
     }
@@ -280,7 +298,7 @@ window.onload = function() {
         paper.text(40, 20, 'SCORE: ' + score).attr({
             'fill': 'darkblue',
         });
-        if (score % 1000 === 0) speed += 0.2;
+        if (score % 100 === 0) speed += 0.2; // CHANEGE 100 WITH BIGGER NUMBER FOR NORMAL PLAY :)
     }
 
     function updateHealth() {
