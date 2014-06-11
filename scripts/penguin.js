@@ -4,7 +4,7 @@ window.onload = function() {
         OUTER_HEALTH_BAR_HEIGHT = 6,
         INNER_HEALTH_BAR_HEIGHT = 4,
         HEALTH_BAR_RADIUS = 1,
-        damage = 0.3,
+        damage = 3,
         initialHealth = 30;
 
     var gameboardCenter = 500,
@@ -17,7 +17,7 @@ window.onload = function() {
 
     // starts the background loop music
     activeBackgroundSound();
-    
+
     var paper = Raphael(10, 10, 980, 500);
     var track = paper.path('M' + (gameboardCenter - 50) + ' 100 h 100 l ' +
         gameboardHeight + ' ' + gameboardHeight + ' h-' +
@@ -66,7 +66,7 @@ window.onload = function() {
         if (initialHealth > 0) {
             window.requestAnimationFrame(run);
         } else {
-			// TODO GAME OVER SCREEN :(
+            // TODO GAME OVER SCREEN :(
             gameOverSound();
         }
     }
@@ -75,33 +75,35 @@ window.onload = function() {
         if (!parseInt(Math.random() * 500 / difficulty / speed)) {
             var xPos = Math.random() * 80 + 460;
             var obstacle = makeRect(xPos, 100);
+            obstacle.hasPenguinInside = false;
             obstacles.push(obstacle);
         }
         return obstacle;
     }
 
     function moveObstacles() {
-        var penguinInObstacle = false;
+        var transformArr = ['s ', 0, ' ', 0, ' ', gameboardCenter, ' 50'];
         for (var i = 0; i < obstacles.length; i++) {
-            var transformString = 's ' + obstacles[i].myY / 100 +
-                ' ' + obstacles[i].myY / 100 + ' ' + gameboardCenter + ' 50';
-            obstacles[i].transform(transformString);
-
-            penguinInObstacle = checkCollision(obstacles[i]);
-            if (penguinInObstacle) {
-                initialHealth -= damage;
-                !penguinInObstacle;
+            var step = obstacles[i].myY / 100;
+            transformArr[1] = step;
+            transformArr[3] = step;
+            obstacles[i].transform(transformArr.join(''));
+            if (obstacles[i].myY > penguin.position.y && !obstacles[i].hasPenguinInside) {
+                obstacles[i].hasPenguinInside = checkCollision(obstacles[i]);
+                if (obstacles[i].hasPenguinInside) {
+                    initialHealth -= damage;
+                    console.log('Fall')
+                }
             }
 
-            obstacles[i].myY = obstacles[i].myY + obstacles[i].myY / 100 * speed;
-            if (obstacles[i].myY > gameboardCenter + gameboardHeight) {
+            obstacles[i].myY = obstacles[i].myY + step * speed;
+            if (obstacles[i].myY > gameboardHeight + 450) { // this constant is not correct at all!!
                 obstacles[i].remove();
                 obstacles.splice(i, 1);
             }
 
             penguin.toFront();
         }
-        return penguinInObstacle;
     }
 
     function checkCollision(currentObstacle) {
@@ -200,12 +202,6 @@ window.onload = function() {
         penguin.position = position;
         penguin.walk = walk;
         penguin.jump = jump;
-
-        // for testing only
-        // var testrect = paper.rect(0, 0, 2, 2).attr({
-        //     'stroke': '#ff0000',
-        //     'fill': '#ff0000'
-        // });
 
         // [pinguin healthbar]
         var outerRect = paper.rect(0, 0,

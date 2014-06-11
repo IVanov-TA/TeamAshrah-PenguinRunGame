@@ -1,5 +1,4 @@
-﻿
-//canvas init
+﻿//canvas init
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
@@ -39,6 +38,7 @@ function draw() {
 //Function to move the snowflakes
 //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
 var angle = 0;
+
 function update() {
     angle += 0.01;
     for (var i = 0; i < mp; i++) {
@@ -55,17 +55,30 @@ function update() {
         if (p.x > W + 5 || p.x < -5 || p.y > H) {
             if (i % 3 > 0) //66.67% of the flakes
             {
-                particles[i] = { x: Math.random() * W, y: -10, r: p.r, d: p.d };
-            }
-            else {
+                particles[i] = {
+                    x: Math.random() * W,
+                    y: -10,
+                    r: p.r,
+                    d: p.d
+                };
+            } else {
                 //If the flake is exitting from the right
                 if (Math.sin(angle) > 0) {
                     //Enter from the left
-                    particles[i] = { x: -5, y: Math.random() * H, r: p.r, d: p.d };
-                }
-                else {
+                    particles[i] = {
+                        x: -5,
+                        y: Math.random() * H,
+                        r: p.r,
+                        d: p.d
+                    };
+                } else {
                     //Enter from the right
-                    particles[i] = { x: W + 5, y: Math.random() * H, r: p.r, d: p.d };
+                    particles[i] = {
+                        x: W + 5,
+                        y: Math.random() * H,
+                        r: p.r,
+                        d: p.d
+                    };
                 }
             }
         }
@@ -73,4 +86,4 @@ function update() {
 }
 
 //animation loop
-setInterval(draw, 33);
+setInterval(draw, 100); //was 33 (Julian)
