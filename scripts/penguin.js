@@ -4,7 +4,7 @@ window.onload = function() {
         OUTER_HEALTH_BAR_HEIGHT = 6,
         INNER_HEALTH_BAR_HEIGHT = 4,
         HEALTH_BAR_RADIUS = 1,
-        damage = 30,
+        damage = 3,
         initialHealth = 30;
 
     var gameboardCenter = 500,
