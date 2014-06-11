@@ -171,11 +171,16 @@ window.onload = function() {
 
 
         function walk() {
-            if ((penguin.position.x < 200) || (penguin.position.x > 800)) {
+            penguin.position.x += penguin.step;
+            if (penguin.position.x < 200) {
+                penguin.position.x = 200;
+                penguin.step = 0;
+            }
+            if (penguin.position.x > 800) {
+                penguin.position.x = 800
                 penguin.step = 0;
             }
 
-            penguin.position.x += penguin.step;
             penguin[0].transform('T' + ' ' + penguin.position.x + ' ' + (penguin.position.y + legTransform));
             penguin[1].transform('T' + ' ' + penguin.position.x + ' ' + (penguin.position.y - legTransform));
             if (jumpLen > -50) {
