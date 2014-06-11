@@ -172,12 +172,12 @@ window.onload = function() {
 
         function walk() {
             penguin.position.x += penguin.step;
-            if (penguin.position.x < 200) {
-                penguin.position.x = 200;
+            if (penguin.position.x < 220) {
+                penguin.position.x = 220;
                 penguin.step = 0;
             }
-            if (penguin.position.x > 800) {
-                penguin.position.x = 800
+            if (penguin.position.x > 780) {
+                penguin.position.x = 780
                 penguin.step = 0;
             }
 
