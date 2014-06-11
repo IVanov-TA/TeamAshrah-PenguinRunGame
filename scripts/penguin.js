@@ -4,7 +4,7 @@ window.onload = function() {
         OUTER_HEALTH_BAR_HEIGHT = 6,
         INNER_HEALTH_BAR_HEIGHT = 4,
         HEALTH_BAR_RADIUS = 1,
-        damage = 3,
+        damage = 30,
         initialHealth = 30;
 
     var gameboardCenter = 500,
@@ -14,6 +14,7 @@ window.onload = function() {
         xNewPosition = 0,
         difficulty = 5,
         obstacles = [];
+
 
     // starts the background loop music
     activeBackgroundSound();
@@ -26,6 +27,21 @@ window.onload = function() {
         'stroke': '#99FFFF',
         'fill': '#CCFFFF'
     });
+
+    // game over windows
+    var GAME_OVER_WIDTH = 400,
+        GAME_OVER_HEIGHT = 400,
+        GAME_OVER_POS_X = paper.width / 2 - GAME_OVER_WIDTH / 2,
+        GAME_OVER_POS_Y = paper.height / 2 - GAME_OVER_HEIGHT / 2,
+        GAME_OVER_RADIOUS = 20;
+
+
+    var img = paper.image('pics/gameOver.png',
+        GAME_OVER_POS_X,
+        GAME_OVER_POS_Y,
+        GAME_OVER_WIDTH,
+        GAME_OVER_HEIGHT);
+    img.hide();
 
     document.getElementsByTagName("body")[0].addEventListener("keydown", getKey, false);
     var penguin = makePenguin();
@@ -66,9 +82,17 @@ window.onload = function() {
         if (initialHealth > 0) {
             window.requestAnimationFrame(run);
         } else {
-            // TODO GAME OVER SCREEN :(
+            hideObsticales();
+            penguin.hide();
+            img.show();
             gameOverSound();
         }
+    }
+
+    function hideObsticales() {
+        for (var i = 0; i < obstacles.length; i++) {
+            obstacles.splice(i, 1);
+        };
     }
 
     function generateNewObstacles() {
