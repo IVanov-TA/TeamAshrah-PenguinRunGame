@@ -1,7 +1,7 @@
 function menuBackground() {
 	var menuBg = new Audio('./sounds/menuBackground.mp3');
 	menuBg.loop = true;
-	menuBg.volume = 0.3;
+	menuBg.volume = 0.2;
 	menuBg.play();
 }
 
