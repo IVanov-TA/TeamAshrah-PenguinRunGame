@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = function () {
     'use strict';
     var OUTER_HEALTH_BAR_WIDTH = 32,
         OUTER_HEALTH_BAR_HEIGHT = 6,
@@ -24,9 +24,9 @@ window.onload = function() {
         gameboardHeight + ' ' + gameboardHeight + ' h-' +
         (2 * gameboardHeight + 100) + ' l ' + gameboardHeight + ' ' +
         (-gameboardHeight) + ' Z').attr({
-        'stroke': '#99FFFF',
-        'fill': '#CCFFFF'
-    });
+            'stroke': '#99FFFF',
+            'fill': '#CCFFFF'
+        });
 
     // game over windows
     var GAME_OVER_WIDTH = 400,
@@ -87,7 +87,24 @@ window.onload = function() {
             //            hideObsticales();
             penguin.hide();
             img.show();
-            img.toFront()
+            img.toFront();
+
+            var playAgain = document.createElement('button');
+            playAgain.style.width = '200px';
+            playAgain.style.height = '100px';
+            playAgain.style.position = 'absolute';
+            playAgain.style.top = '230px';
+            playAgain.style.left = '60px';
+            playAgain.innerText = 'Play  Again';
+            playAgain.style.zIndex = '20';
+			playAgain.onmouseover = function(){ btnHovered(); };
+            playAgain.onclick = function () {
+                location.reload();
+            };
+
+            document.body.appendChild(playAgain);
+
+
             gameOverSound();
         }
     }
